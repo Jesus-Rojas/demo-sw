@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button onclick="getOneRecord()">Get one record</button>
+  <div id="app"></div>
+  <script>
+    if (navigator.serviceWorker) {
+      navigator.serviceWorker.register('/sw.js');
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'RELOAD_PAGE') {
+          confirm('Esta seguro de recargar la pagina??') && window.location.reload();
+        }
+      });
+    }
+
+    async function getOneRecord() {
+      try {
+        const response = await fetch('https://restcountries.com/v3.1/alpha/co');
+        const data = await response.json();
+        document.querySelector('#app').textContent = JSON.stringify(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  </script>
+</body>
+</html>
